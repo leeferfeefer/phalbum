@@ -1,13 +1,27 @@
 import React, {useState, useEffect} from 'react';
 import FileBase64 from 'react-file-base64';
+import AxiosService from './service/Axios.service';
+import Loader from "react-loader-spinner";
 
 function App() {
   const [images, setImages] = useState([]);
+  const [isLoaderVisible, setIsLoaderVisible] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  const getImages = (images) => {
-    setImages(images);
 
-    // send to API here
+  const getImages = async (images) => {
+    
+    setIsLoaderVisible(true);
+    const isSuccessful = await AxiosService.uploadImages(images);
+    setIsLoaderVisible(false);
+
+    // show message
+    if (isSuccessful) {
+      setImages(images);
+      setIsError(false);    
+    } else {
+      setIsError(true);    
+    }
   }
 
   const renderImages = () => {
@@ -25,10 +39,24 @@ function App() {
           <FileBase64 type="file" multiple={true} onDone={getImages} />
         </div>
         <br/>
-        <div className="images">
-          You uploaded:
-        </div>
-        {renderImages()}
+        {isLoaderVisible && 
+          <Loader
+            type="Puff"
+            color="#00BFFF"
+            height={100}
+            width={100}        
+          />
+        }
+        {!isError ?
+          <> 
+            <div className="images">
+              You uploaded:
+            </div>
+            {renderImages()}
+          </>
+          :
+          <div style={{color: 'red'}}> Error! Try again.</div>
+        }
       </div>
     </div>
   );
