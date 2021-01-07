@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useEffect} from 'react';
+import FileBase64 from 'react-file-base64';
 
 function App() {
+  const [images, setImages] = useState([]);
+
+  const getImages = (images) => {
+    setImages(images);
+
+    // send to API here
+  }
+
+  const renderImages = () => {
+    return images.map((image, index) => {
+      return <img src={image.base64} alt={`image-${index}`} className="image"/>
+    });
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h3 className="heading">Phalbum</h3>
+      <div className="image-container">    
+        <h4 className="subheader">Upload Image</h4>
+        <div className="files">
+          <FileBase64 type="file" multiple={true} onDone={getImages} />
+        </div>
+        <br/>
+        <div className="images">
+          You uploaded:
+        </div>
+        {renderImages()}
+      </div>
     </div>
   );
 }
