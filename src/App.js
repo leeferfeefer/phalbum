@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import FileBase64 from 'react-file-base64';
 import AxiosService from './service/Axios.service';
 import Loader from "react-loader-spinner";
+import Image from './model/Image';
 
 function App() {
   const [images, setImages] = useState([]);
@@ -10,10 +11,11 @@ function App() {
 
 
   const getImages = async (images) => {
-    setIsError(false);    
+    setIsError(false); 
 
     setIsLoaderVisible(true);
-    const isSuccessful = await AxiosService.uploadImages(images);
+    const phalbumImages = Image.transform(images);
+    const isSuccessful = await AxiosService.uploadImages(phalbumImages);
     setIsLoaderVisible(false);
 
     if (isSuccessful) {
@@ -26,7 +28,7 @@ function App() {
 
   const renderImages = () => {
     return images.map((image, index) => {
-      return <img src={image.base64} alt={`image-${index}`} className="image"/>
+      return <img key={index} src={image.base64} className="image"/>
     });
   }
 
@@ -36,7 +38,7 @@ function App() {
       <div className="image-container">    
         <h4 className="subheader">Upload Image</h4>
         <div className="files">
-          <FileBase64 type="file" multiple={true} onDone={getImages} />
+          <FileBase64 type="file" multiple={true} onDone={getImages}/>
         </div>
         <br/>
         {isLoaderVisible && 
