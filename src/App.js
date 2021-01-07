@@ -10,12 +10,12 @@ function App() {
 
 
   const getImages = async (images) => {
-    
+    setIsError(false);    
+
     setIsLoaderVisible(true);
     const isSuccessful = await AxiosService.uploadImages(images);
     setIsLoaderVisible(false);
 
-    // show message
     if (isSuccessful) {
       setImages(images);
       setIsError(false);    
