@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import FileBase64 from 'react-file-base64';
 import AxiosService from './service/Axios.service';
 import Loader from "react-loader-spinner";
@@ -20,7 +20,6 @@ function App() {
 
     if (isSuccessful) {
       setImages(images);
-      setIsError(false);    
     } else {
       setIsError(true);    
     }
