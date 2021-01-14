@@ -7,15 +7,17 @@ const instance = axios.create({
 
 
 const uploadImages = async (images) => {
-    try {
-        await instance.post('upload', {
-            images
-        });
-        return true;
-    } catch(error) {
-        console.log(`Error sending photos! ${error.message}`);
-        return false;
+    for (const image of images) {
+        try {
+            await instance.post('upload', {
+                images: [image]
+            });
+        } catch(error) {
+            console.log(`Error sending photos! ${error.message}`);
+            return false;
+        }
     }
+    return true;
 };
 
 export default {
