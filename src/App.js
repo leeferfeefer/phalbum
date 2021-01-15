@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import FileBase64 from 'react-file-base64';
 import AxiosService from './service/Axios.service';
 import Loader from "react-loader-spinner";
 import Image from './model/Image';
+import FileUploaderButton from './component/FileUploaderButton';
 
 function App() {
   const [images, setImages] = useState([]);
@@ -11,8 +11,6 @@ function App() {
 
 
   const getImages = async (images) => {
-    setIsError(false); 
-
     setIsLoaderVisible(true);
     const phalbumImages = Image.transform(images);
     const isSuccessful = await AxiosService.uploadImages(phalbumImages);
@@ -31,13 +29,21 @@ function App() {
     });
   }
 
+  const onFileUploadButtonPress = () => {
+    setIsError(false); 
+    setImages([]);
+  };
+
   return (
     <div className="container">
       <h3 className="heading">Phalbum</h3>
       <div className="image-container">    
         <h4 className="subheader">Upload Image</h4>
         <div className="files">
-          <FileBase64 type="file" multiple={true} onDone={getImages}/>
+          <FileUploaderButton 
+            onDone={getImages}
+            onPress={onFileUploadButtonPress}
+          />
         </div>
         <br/>
         {isLoaderVisible && 
@@ -48,14 +54,15 @@ function App() {
             width={100}        
           />
         }
-        {!isError ?
+        {images.length > 0 &&
           <> 
             <div className="images">
               You uploaded:
             </div>
             {renderImages()}
           </>
-          :
+        }
+        {isError && 
           <div style={{color: 'red'}}> Error! Try again.</div>
         }
       </div>
