@@ -20,6 +20,15 @@ const uploadImages = async (images) => {
     return true;
 };
 
+const processImages = async () => {
+    try {
+        await instance.post('process');
+    } catch(error) {
+        console.log(`Error processing photos! ${error.message}`);
+    }
+};
+
 export default {
-    uploadImages
+    uploadImages,
+    processImages
 }

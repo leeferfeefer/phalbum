@@ -34,6 +34,10 @@ function App() {
     setImages([]);
   };
 
+  const processImages = async () => {
+    await AxiosService.processImages();
+  };
+
   return (
     <div className="container">
       <h3 className="heading">Phalbum</h3>
@@ -59,7 +63,8 @@ function App() {
             <div className="images">
               You uploaded:
             </div>
-            {renderImages()}
+            <button onClick={processImages}>Process?</button>
+            {renderImages()}            
           </>
         }
         {isError && 
